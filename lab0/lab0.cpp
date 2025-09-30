@@ -117,7 +117,7 @@ void showKs(const Ks& ks) {
         return;
     }
     cout << "КС: " << ks.name
-        << ", Цехов: " << ks.countceh
+        << ", Цехов: " << ks.countceh 
         << ", Работает: " << ks.countworkceh
         << ", Класс: " << ks.klass << "\n";
 }
