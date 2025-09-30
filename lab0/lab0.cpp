@@ -22,7 +22,7 @@ void addTube(Tube& tube) {
     cout << "Введите километровую отметку трубы: ";
     cin.ignore();
     getline(cin, tube.Name);
-    cout << "Eсли хотите ввести нецелое число - используйте точку.";
+    cout << "Eсли хотите ввести нецелое число - используйте точку.\n";
     cout << "Введите длину трубы (км): ";
     while (!(cin >> tube.Dlina) || tube.Dlina <= 0) {
         cout << "Ошибка! Введите положительное число: ";
@@ -124,7 +124,7 @@ void showKs(const Ks& ks) {
 void saveFile(const Tube& tube, const Ks& ks) {
     ofstream file("data.txt");
     if (!file.is_open()) {
-        cout << "Произошла ошибка открытия файла!\n";
+        cout << "Произошла ошибка открытия файла для записи!\n";
         return;
     }
     file << tube.Name << "\n" << tube.Dlina << "\n" << tube.Diametr << "\n" << tube.Check << "\n";
@@ -133,58 +133,85 @@ void saveFile(const Tube& tube, const Ks& ks) {
     cout << "Файл был успешно сохранен!\n";
 }
 void loadFile(Tube& tube, Ks& ks) {
-
+    ifstream file("data.txt");
+    if (!file.is_open()) {
+        cout << "Произошла ошибка открытия файла для чтения!\n";
+        return;
+    }
+    getline(file, tube.Name);
+    file >> tube.Dlina >> tube.Diametr >> tube.Check;
+    file.ignore();
+    getline(file, ks.name);
+    file >> ks.countceh >> ks.countworkceh >> ks.klass;
+    file.ignore();
+    getline(file, ks.klass);
+    file.close();
+    cout << "Данные были успешно загружены из файла!^^\n";
+}
+void showAll(const Tube& tube, const Ks& ks) {
+    cout << "Все записанные объекты\n";
+    showTube(tube);
+    showKs(ks);
+    cout << "----------------------\n";
 }
 void menu() {
     setlocale(LC_ALL, "Russian");
     Tube tube;
     Ks ks;
     while (true) {
-        cout << "1. Добавить трубу \n2. Добавить КС \n3. Просмотр всех объектов \n4. Редактировать трубу \n5. Редактировать КС \n6. Сохранить \n7. Загрузить \n0. Выход\n";
+        cout << "1. Добавить трубу \n2. Добавить КС \n3. Просмотр всех объектов \n4. Редактировать трубу \n5. Редактировать КС \n6. Сохранить \n7. Загрузить \n8. Выход\n";
         int number;
         cin >> number;
         switch (number) {
         case 1:
-        {
+        
             addTube(tube);
             break;
-        }
+        
         case 2:
-        {
+        
+            addKs(ks);
             break;
-        }
+        
         case 3:
-        {   
-
+         
+            showAll(tube, ks);
             break;
-        }
+        
         case 4:
-        {
+        
+            editTube(tube);
             break;
-        }
+        
         case 5:
-        {
+        
+            editKs(ks);
             break;
-        }
+        
         case 6:
-        {
+        
+            saveFile(tube, ks);
             break;
-        }
+        
         case 7:
-        {
+        
+            loadFile(tube, ks);
             break;
-        }
+        
         case 8:
-        {
-            break;
-        }
-
+        
+            cout << "Выход из программы...\n";
+            return;        
+        default:
+            cout << "Ошибка! Введенное значение должно быть от 1 до 8. Попробуйте снова!\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
     }
 }
 
-int main() { // Добавлена функция main()
-    menu(); // Вызов функции menu()
+int main() {
+    menu(); 
     return 0;
 }
